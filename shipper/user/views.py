@@ -34,7 +34,7 @@ def signup(request):
 @api_view(["GET", "POST"])
 def signin(request):
     if request.method == "POST" and UserModel.objects.filter(username=request.POST.get("username")).values_list("username", "password").exists():
-        request.session["user"] == request.POST.get("username")
+        request.session["user"] = request.POST.get("username")
         return HttpResponse("succesfully logged in")
     else:
         return HttpResponse("Incorrect creds")
@@ -44,7 +44,8 @@ def signin(request):
 @csrf_exempt
 @api_view(["GET"])
 def signout(request):
-    if request.session["user"] == "":
+    print(request.session['user'])
+    if request.session['user'] == "":
         return HttpResponse("user alreayd signed out, signin again")
-    request.session["user"] = ""
+    request.session['user'] = ""
     return HttpResponse("logged out")
